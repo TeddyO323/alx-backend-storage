@@ -198,10 +198,6 @@ $ python3
       [5a8f60cfd4321e1403ba7abb] UCSF 505 Parnassus Ave
       ```
 
-Here are the remaining tasks for your MongoDB project written in Markdown language for your README.md file on GitHub:
-
-### Tasks (Continued)
-
 11. **Update Topics in a Document**
     - **Description:** Write a Python function that changes all topics of a school document based on the name.
     - **Prototype:** `def update_topics(mongo_collection, name, topics):`
