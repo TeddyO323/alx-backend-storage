@@ -1,7 +1,8 @@
 # 0x02. Redis Basic
 
-## Back-end
-Redis
+### Back-end | Redis
+
+![redis](images/40eab4627f1bea7dfe5e.png)
 
 ## Resources
 Read or watch:
