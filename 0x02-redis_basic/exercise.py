@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 import redis
 import uuid
-from typing import Union, Callable, Optional
+from typing import Union, Callable
+from functools import wraps
+
+def count_calls(method: Callable) -> Callable:
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        key = f"{method.__qualname__}"
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 class Cache:
     def __init__(self):
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
@@ -30,11 +40,8 @@ class Cache:
 # Usage example
 if __name__ == "__main__":
     cache = Cache()
-    test_cases = {
-        b"foo": None,
-        123: int,
-        "bar": lambda d: d.decode("utf-8")
-    }
-    for value, fn in test_cases.items():
-        key = cache.store(value)
-        assert cache.get(key, fn=fn) == value
+    cache.store(b"first")
+    print(cache.get(cache.store.__qualname__))
+    cache.store(b"second")
+    cache.store(b"third")
+    print(cache.get(cache.store.__qualname__))
